@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>REX-LAND Adventure — Restaurante temático y experiencia jurásica en Almanara, Torreón</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:        #0d0a07;
+    --bg-2:      #15110c;
+    --panel:     #1a140e;
+    --panel-2:   #221a12;
+    --stone:     #3a312a;
+    --line:      #2a221b;
+    --cream:     #f3ecde;
+    --cream-2:   #d9d0bf;
+    --muted:     #9b8f7e;
+    --bone:      #c8bda6;
+    --yellow:    #f2c012;
+    --yellow-2:  #ffd23a;
+    --moss:      #6a7a3a;
+    --rust:      #b95a2a;
+    --danger-stripe: repeating-linear-gradient(135deg, #f2c012 0 18px, #0d0a07 18px 36px);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--cream);font-family:"DM Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+  button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+  ::selection{background:var(--yellow);color:#111}
+
+  /* ---------- Typography ---------- */
+  .display{font-family:"Anton",system-ui,sans-serif;font-weight:400;letter-spacing:.01em;line-height:.9;text-transform:uppercase}
+  .mono{font-family:"JetBrains Mono",monospace;letter-spacing:.04em;text-transform:uppercase;font-size:11px}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--bone)}
+  .eyebrow::before{content:"";width:28px;height:1px;background:var(--yellow)}
+
+  /* ---------- Layout ---------- */
+  .wrap{max-width:1280px;margin:0 auto;padding:0 28px}
+  section{position:relative}
+
+  /* ---------- Top utility bar ---------- */
+  .util{
+    background:#070503;border-bottom:1px solid var(--line);
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--bone);
+  }
+  .util-row{display:flex;justify-content:space-between;align-items:center;padding:10px 28px;gap:16px;flex-wrap:wrap}
+  .util-row .dot{width:6px;height:6px;border-radius:50%;background:var(--yellow);display:inline-block;margin-right:8px;box-shadow:0 0 0 4px rgba(242,192,18,.15)}
+  .util-right{display:flex;gap:22px}
+  .util-right span{display:inline-flex;align-items:center;gap:8px}
+
+  /* ---------- Nav ---------- */
+  nav.main{position:sticky;top:0;z-index:50;background:rgba(8,6,4,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;gap:24px}
+  .brand{display:flex;align-items:center;gap:14px}
+  .brand-mark{
+    width:42px;height:42px;border:1px solid var(--yellow);display:grid;place-items:center;background:#0d0a07;
+    position:relative;
+  }
+  .brand-mark::after{content:"";position:absolute;inset:3px;border:1px dashed rgba(242,192,18,.4)}
+  .brand-mark svg{width:24px;height:24px;color:var(--yellow)}
+  .brand-text{line-height:1}
+  .brand-text .name{font-family:"Anton",sans-serif;font-size:20px;letter-spacing:.05em;color:var(--cream)}
+  .brand-text .sub{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.32em;color:var(--bone);margin-top:4px}
+  .nav-links{display:flex;gap:30px;font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--bone)}
+  .nav-links a{position:relative;padding:6px 0}
+  .nav-links a:hover{color:var(--cream)}
+  .nav-links a.active{color:var(--cream)}
+  .nav-links a.active::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--yellow)}
+  .nav-cta{display:flex;align-items:center;gap:10px}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;padding:13px 20px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    background:var(--yellow);color:#111;border:1px solid var(--yellow);transition:transform .15s ease,background .15s ease
+  }
+  .btn:hover{background:var(--yellow-2);transform:translateY(-1px)}
+  .btn.ghost{background:transparent;color:var(--cream);border:1px solid rgba(243,236,222,.25)}
+  .btn.ghost:hover{border-color:var(--cream);background:rgba(255,255,255,.04)}
+  .btn .arr{width:14px;height:1.5px;background:currentColor;position:relative}
+  .btn .arr::after{content:"";position:absolute;right:-1px;top:-3px;width:8px;height:8px;border-top:1.5px solid currentColor;border-right:1.5px solid currentColor;transform:rotate(45deg)}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;min-height:760px;display:flex;align-items:flex-end;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero-bg{position:absolute;inset:0;background:#000}
+  .hero-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.62}
+  .hero-bg::after{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 100%, rgba(13,10,7,.92), transparent 60%),
+      linear-gradient(180deg, rgba(13,10,7,.35) 0%, rgba(13,10,7,.2) 35%, rgba(13,10,7,.95) 92%);
+  }
+  .hero-grain{position:absolute;inset:0;pointer-events:none;opacity:.18;mix-blend-mode:overlay;
+    background-image:
+      radial-gradient(rgba(255,255,255,.4) 1px, transparent 1px),
+      radial-gradient(rgba(0,0,0,.4) 1px, transparent 1px);
+    background-size:3px 3px,5px 5px;
+    background-position:0 0,1px 1px;
+  }
+  .hero-inner{position:relative;width:100%;padding:140px 28px 90px;max-width:1280px;margin:0 auto}
+  .hero-meta{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap}
+  .hero-left{flex:1 1 640px;max-width:780px}
+  .hero h1{font-size:clamp(72px,11vw,176px);margin:18px 0 0;color:var(--cream);text-shadow:0 4px 30px rgba(0,0,0,.5)}
+  .hero h1 .accent{color:var(--yellow)}
+  .hero h1 .small{display:block;font-size:.42em;letter-spacing:.32em;color:var(--bone);margin-top:8px;font-family:"JetBrains Mono",monospace;text-transform:uppercase;text-shadow:none}
+  .hero-tag{margin-top:28px;font-size:18px;line-height:1.55;color:var(--cream-2);max-width:540px;text-wrap:pretty}
+  .hero-cta{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap}
+  .hero-right{flex:0 0 280px;display:flex;flex-direction:column;gap:18px}
+  .info-card{border:1px solid var(--line);background:rgba(13,10,7,.55);backdrop-filter:blur(8px);padding:18px 20px}
+  .info-card .label{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.24em;color:var(--bone);text-transform:uppercase}
+  .info-card .val{font-family:"Anton",sans-serif;font-size:30px;color:var(--cream);margin-top:6px;letter-spacing:.04em}
+  .info-card .val small{font-size:14px;color:var(--bone);margin-left:4px;letter-spacing:.18em;font-family:"JetBrains Mono",monospace}
+
+  /* danger stripe */
+  .stripe{height:14px;background:var(--danger-stripe)}
+
+  /* ---------- Stats ---------- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);background:var(--bg-2);border-bottom:1px solid var(--line)}
+  .stat{padding:36px 28px;border-right:1px solid var(--line);position:relative}
+  .stat:last-child{border-right:0}
+  .stat .num{font-family:"Anton",sans-serif;font-size:64px;color:var(--cream);line-height:1;letter-spacing:.02em}
+  .stat .num .u{color:var(--yellow);font-size:24px;margin-left:6px;vertical-align:top}
+  .stat .lbl{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--bone);margin-top:10px}
+
+  /* ---------- Experience ---------- */
+  .experience{padding:120px 0;background:var(--bg)}
+  .exp-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center}
+  .exp-img{position:relative;border:1px solid var(--line);overflow:hidden;background:#000;aspect-ratio:4/5}
+  .exp-img img{width:100%;height:100%;object-fit:cover;opacity:.95}
+  .exp-img .tag{
+    position:absolute;left:18px;top:18px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;
+    text-transform:uppercase;background:var(--yellow);color:#111;padding:8px 12px
+  }
+  .exp-img .specimen{
+    position:absolute;left:18px;bottom:18px;border:1px solid rgba(243,236,222,.3);background:rgba(13,10,7,.7);
+    backdrop-filter:blur(6px);padding:14px 16px;min-width:240px;font-family:"JetBrains Mono",monospace;color:var(--cream);
+  }
+  .specimen .row{display:flex;justify-content:space-between;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;padding:3px 0;color:var(--bone)}
+  .specimen .row b{color:var(--cream);font-weight:500}
+  .specimen .name{font-family:"Anton",sans-serif;font-size:22px;letter-spacing:.04em;margin-bottom:8px;color:var(--cream)}
+  .exp-text h2{font-family:"Anton",sans-serif;font-size:clamp(48px,5.6vw,84px);line-height:.92;margin:18px 0 24px;text-transform:uppercase;letter-spacing:.01em}
+  .exp-text h2 .y{color:var(--yellow)}
+  .exp-text p{font-size:17px;line-height:1.65;color:var(--cream-2);margin:0 0 20px;text-wrap:pretty}
+  .features{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}
+  .feature{border:1px solid var(--line);padding:18px;display:flex;gap:14px;align-items:flex-start;background:var(--panel)}
+  .feature .ico{width:34px;height:34px;border:1px solid var(--yellow);color:var(--yellow);display:grid;place-items:center;flex:0 0 34px}
+  .feature .ico svg{width:18px;height:18px}
+  .feature h4{margin:0 0 4px;font-family:"DM Sans",sans-serif;font-size:14.5px;font-weight:600;color:var(--cream)}
+  .feature p{margin:0;font-size:13px;color:var(--muted);line-height:1.5}
+
+  /* ---------- Zones ---------- */
+  .zones{padding:120px 0;background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .zones-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:48px;flex-wrap:wrap}
+  .zones-head h2{font-family:"Anton",sans-serif;font-size:clamp(48px,5.6vw,80px);margin:14px 0 0;line-height:.92;letter-spacing:.01em;text-transform:uppercase;max-width:720px}
+  .zones-head p{margin:0;max-width:380px;color:var(--cream-2);line-height:1.6}
+  .zone-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .zone{border:1px solid var(--line);background:var(--panel);padding:28px;display:flex;flex-direction:column;gap:18px;min-height:340px;position:relative;transition:border-color .2s ease, transform .2s ease}
+  .zone:hover{border-color:var(--yellow);transform:translateY(-2px)}
+  .zone .num{position:absolute;right:24px;top:22px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.2em;color:var(--bone)}
+  .zone .ico{width:48px;height:48px;border:1px solid var(--yellow);color:var(--yellow);display:grid;place-items:center}
+  .zone .ico svg{width:26px;height:26px}
+  .zone h3{font-family:"Anton",sans-serif;font-size:30px;letter-spacing:.03em;margin:6px 0 0;text-transform:uppercase;color:var(--cream)}
+  .zone p{margin:0;color:var(--muted);line-height:1.6;font-size:14.5px}
+  .zone .meta{margin-top:auto;display:flex;gap:14px;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.18em;color:var(--bone);text-transform:uppercase}
+  .zone .meta b{color:var(--cream);font-weight:500;margin-right:6px}
+
+  /* ---------- Booking ---------- */
+  .booking{padding:120px 0;background:
+    linear-gradient(180deg, var(--bg) 0%, #100c08 100%);
+    position:relative;overflow:hidden}
+  .booking::before{
+    content:"";position:absolute;left:-200px;top:80px;width:600px;height:600px;
+    background:radial-gradient(circle, rgba(242,192,18,.06), transparent 65%);pointer-events:none
+  }
+  .booking-grid{display:grid;grid-template-columns:1fr 1.35fr;gap:56px;align-items:start;position:relative}
+  .booking-side h2{font-family:"Anton",sans-serif;font-size:clamp(48px,5.6vw,82px);line-height:.92;margin:18px 0 24px;letter-spacing:.01em;text-transform:uppercase}
+  .booking-side h2 .y{color:var(--yellow)}
+  .booking-side p{color:var(--cream-2);line-height:1.65;margin:0 0 28px;font-size:16px}
+  .protocol{border:1px solid var(--line);padding:22px;background:var(--panel)}
+  .protocol h4{margin:0 0 14px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--yellow)}
+  .protocol ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+  .protocol li{display:flex;gap:12px;font-size:13.5px;color:var(--cream-2);line-height:1.5}
+  .protocol li::before{content:"";flex:0 0 14px;width:14px;height:14px;border:1px solid var(--yellow);margin-top:3px;background:
+    linear-gradient(135deg,transparent 45%,var(--yellow) 45% 55%,transparent 55%)}
+
+  .booker{border:1px solid var(--line);background:var(--panel-2);position:relative}
+  .booker-tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line)}
+  .tab{padding:22px 24px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--bone);text-align:left;border-right:1px solid var(--line);display:flex;align-items:center;gap:14px;transition:background .15s ease,color .15s ease}
+  .tab:last-child{border-right:0}
+  .tab .ico{width:34px;height:34px;border:1px solid currentColor;display:grid;place-items:center}
+  .tab .ico svg{width:18px;height:18px}
+  .tab .lbl{display:flex;flex-direction:column;gap:4px;line-height:1}
+  .tab .lbl .big{font-family:"Anton",sans-serif;font-size:20px;letter-spacing:.04em;color:inherit}
+  .tab .lbl .sm{font-size:9.5px;letter-spacing:.18em;color:var(--muted)}
+  .tab.active{background:var(--panel);color:var(--cream);position:relative}
+  .tab.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--yellow)}
+  .tab.active .lbl .big{color:var(--yellow)}
+
+  .booker-body{padding:34px}
+  .field-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .field{display:flex;flex-direction:column;gap:8px}
+  .field label{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--bone)}
+  .field input, .field select{
+    background:#0e0a06;border:1px solid var(--line);color:var(--cream);padding:14px 14px;font-family:"DM Sans",sans-serif;font-size:14.5px;
+    transition:border-color .15s ease;
+  }
+  .field input:focus, .field select:focus{outline:0;border-color:var(--yellow)}
+  .field.col-2{grid-column:span 2}
+  .field.col-4{grid-column:span 4}
+
+  .stepper{display:flex;border:1px solid var(--line);background:#0e0a06}
+  .stepper button{flex:0 0 44px;height:48px;color:var(--cream);font-size:18px;border-right:1px solid var(--line);transition:background .15s ease}
+  .stepper button:last-child{border-right:0;border-left:1px solid var(--line)}
+  .stepper button:hover{background:#1c1610}
+  .stepper input{flex:1;text-align:center;border:0;background:transparent;font-family:"Anton",sans-serif;font-size:22px;letter-spacing:.06em;color:var(--cream)}
+
+  .slots{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}
+  .slot{padding:11px 0;border:1px solid var(--line);font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.08em;color:var(--cream);background:#0e0a06;text-align:center;transition:all .15s ease;position:relative}
+  .slot:hover:not(.disabled){border-color:var(--yellow);color:var(--yellow)}
+  .slot.active{background:var(--yellow);color:#111;border-color:var(--yellow)}
+  .slot.disabled{color:#4b4036;background:#0a0805;cursor:not-allowed;text-decoration:line-through}
+
+  .package-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+  .pkg{border:1px solid var(--line);background:#0e0a06;padding:18px;cursor:pointer;transition:all .15s ease;display:flex;flex-direction:column;gap:6px;position:relative}
+  .pkg:hover{border-color:var(--yellow)}
+  .pkg.active{border-color:var(--yellow);background:#19120a}
+  .pkg.active::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--yellow)}
+  .pkg .name{font-family:"Anton",sans-serif;font-size:22px;letter-spacing:.04em;text-transform:uppercase}
+  .pkg .price{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--yellow)}
+  .pkg .desc{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.45}
+
+  .summary{margin-top:30px;border-top:1px solid var(--line);padding-top:24px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  .summary-left{display:flex;flex-direction:column;gap:4px}
+  .summary-left .lbl{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--bone)}
+  .summary-left .price{font-family:"Anton",sans-serif;font-size:42px;letter-spacing:.04em;color:var(--cream)}
+  .summary-left .price small{font-size:14px;color:var(--bone);letter-spacing:.16em;margin-left:6px;font-family:"JetBrains Mono",monospace}
+  .summary-left .detail{font-size:13px;color:var(--muted);margin-top:2px}
+
+  /* ---------- Menu strip ---------- */
+  .menu{padding:120px 0;background:var(--bg)}
+  .menu-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:50px;flex-wrap:wrap}
+  .menu-head h2{font-family:"Anton",sans-serif;font-size:clamp(48px,5.6vw,80px);margin:14px 0 0;line-height:.92;letter-spacing:.01em;text-transform:uppercase;max-width:720px}
+  .menu-head h2 .y{color:var(--yellow)}
+  .menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .dish{border:1px solid var(--line);background:var(--panel);padding:22px;display:flex;flex-direction:column;gap:14px;min-height:280px;position:relative;transition:border-color .2s ease}
+  .dish:hover{border-color:var(--yellow)}
+  .dish .badge{display:inline-flex;align-self:flex-start;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--yellow);border:1px solid var(--yellow);padding:4px 8px}
+  .dish h3{font-family:"Anton",sans-serif;font-size:26px;letter-spacing:.03em;margin:0;text-transform:uppercase;line-height:1}
+  .dish .es{color:var(--muted);font-size:13.5px;line-height:1.5;margin:0;flex:1}
+  .dish .foot{display:flex;justify-content:space-between;align-items:center;border-top:1px dashed var(--line);padding-top:12px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;color:var(--bone);text-transform:uppercase}
+  .dish .price{color:var(--cream);font-size:14px}
+
+  /* ---------- Location ---------- */
+  .location{padding:120px 0;background:var(--bg-2);border-top:1px solid var(--line)}
+  .loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+  .loc-text h2{font-family:"Anton",sans-serif;font-size:clamp(48px,5.6vw,82px);line-height:.92;margin:18px 0 24px;letter-spacing:.01em;text-transform:uppercase}
+  .loc-text h2 .y{color:var(--yellow)}
+  .loc-text p{color:var(--cream-2);line-height:1.65;font-size:16px;margin:0 0 24px}
+  .loc-data{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+  .data-card{border:1px solid var(--line);padding:18px;background:var(--panel)}
+  .data-card .lbl{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--bone)}
+  .data-card .val{font-family:"DM Sans",sans-serif;font-size:15.5px;color:var(--cream);margin-top:8px;line-height:1.45;font-weight:500}
+  .map{
+    aspect-ratio:1/1;border:1px solid var(--line);background:#0a0805;position:relative;overflow:hidden;
+  }
+  .map svg{position:absolute;inset:0;width:100%;height:100%}
+  .map .pin{
+    position:absolute;left:54%;top:48%;transform:translate(-50%,-100%);font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#111;background:var(--yellow);padding:6px 10px;white-space:nowrap;
+  }
+  .map .pin::after{content:"";position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid var(--yellow)}
+  .map .dot{position:absolute;left:54%;top:48%;width:10px;height:10px;border-radius:50%;background:var(--yellow);transform:translate(-50%,-50%);box-shadow:0 0 0 6px rgba(242,192,18,.2),0 0 0 14px rgba(242,192,18,.08)}
+
+  /* ---------- CTA strip ---------- */
+  .cta-strip{
+    background:var(--yellow);color:#111;
+    background-image:repeating-linear-gradient(135deg, rgba(0,0,0,.08) 0 22px, transparent 22px 50px);
+  }
+  .cta-strip .row{padding:48px 28px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+  .cta-strip h3{font-family:"Anton",sans-serif;font-size:clamp(36px,4.6vw,64px);margin:0;letter-spacing:.02em;line-height:.95;text-transform:uppercase}
+  .cta-strip .btn{background:#111;color:var(--yellow);border-color:#111}
+  .cta-strip .btn:hover{background:#000}
+
+  /* ---------- Footer ---------- */
+  footer{background:#070503;padding:80px 0 30px;border-top:1px solid var(--line)}
+  .ft-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:50px}
+  .ft-grid h5{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--yellow);margin:0 0 18px}
+  .ft-grid ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+  .ft-grid a{color:var(--cream-2);font-size:14px}
+  .ft-grid a:hover{color:var(--yellow)}
+  .ft-about{color:var(--cream-2);line-height:1.6;font-size:14px;max-width:340px}
+  .ft-bot{border-top:1px solid var(--line);padding-top:24px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--bone)}
+
+  /* ---------- Confirmation modal ---------- */
+  .modal{position:fixed;inset:0;z-index:100;display:none;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);padding:30px;align-items:center;justify-content:center}
+  .modal.show{display:flex}
+  .modal-card{max-width:540px;width:100%;border:1px solid var(--yellow);background:var(--panel);padding:40px;position:relative}
+  .modal-card .close{position:absolute;right:18px;top:14px;font-size:24px;color:var(--bone);background:none;border:0;cursor:pointer}
+  .modal-card h3{font-family:"Anton",sans-serif;font-size:36px;letter-spacing:.03em;margin:0 0 8px;text-transform:uppercase}
+  .modal-card .y{color:var(--yellow)}
+  .modal-card p{color:var(--cream-2);line-height:1.6;margin:8px 0 22px}
+  .modal-card .rec{border:1px solid var(--line);padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .modal-card .rec .lbl{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--bone);text-transform:uppercase}
+  .modal-card .rec .val{font-size:14px;color:var(--cream);margin-top:4px;font-weight:500}
+  .modal-card .code{margin-top:18px;border:1px dashed var(--yellow);padding:14px;text-align:center;font-family:"JetBrains Mono",monospace;color:var(--yellow);letter-spacing:.3em;font-size:14px}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1100px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .stat{border-bottom:1px solid var(--line)}
+    .stat:nth-child(odd){border-right:1px solid var(--line)}
+    .stat:nth-child(even){border-right:0}
+    .exp-grid, .booking-grid, .loc-grid{grid-template-columns:1fr;gap:40px}
+    .zone-grid, .menu-grid{grid-template-columns:repeat(2,1fr)}
+    .field-grid{grid-template-columns:repeat(2,1fr)}
+    .field.col-2, .field.col-4{grid-column:span 2}
+    .slots{grid-template-columns:repeat(4,1fr)}
+    .ft-grid{grid-template-columns:1fr 1fr;gap:30px}
+  }
+  @media (max-width: 640px){
+    .nav-links{display:none}
+    .hero-inner{padding:90px 22px 60px}
+    .util-row{display:none}
+    .zone-grid, .menu-grid, .package-grid{grid-template-columns:1fr}
+    .field-grid{grid-template-columns:1fr}
+    .field.col-2, .field.col-4{grid-column:span 1}
+    .slots{grid-template-columns:repeat(3,1fr)}
+    .ft-grid{grid-template-columns:1fr}
+    .hero h1{font-size:64px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============== UTILITY BAR ============== -->
+<div class="util">
+  <div class="util-row">
+    <div><span class="dot"></span>Próxima apertura · Almanara, Torreón</div>
+    <div class="util-right">
+      <span>📞 +52 871 000 0000</span>
+      <span>✦ Lun–Dom · 13:00–23:00</span>
+      <span>ES · EN</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============== NAV ============== -->
+<nav class="main">
+  <div class="nav-row">
+    <a href="#top" class="brand">
+      <div class="brand-mark">
+        <!-- abstract dino skull/triangle icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M3 14 L8 6 L14 9 L20 7 L19 13 L21 16 L17 17 L15 21 L11 18 L7 19 L5 16 Z"/>
+          <circle cx="9" cy="12" r=".9" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="name">REX·LAND</div>
+        <div class="sub">Adventure · MX</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#top" class="active">Inicio</a>
+      <a href="#experiencia">Experiencia</a>
+      <a href="#zonas">Zonas</a>
+      <a href="#reservas">Reservas</a>
+      <a href="#menu">Menú</a>
+      <a href="#ubicacion">Ubicación</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#reservas" class="btn">Reservar <span class="arr"></span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============== HERO ============== -->
+<section class="hero" id="top">
+  <div class="hero-bg">
+    <img src="assets/fachada.png" alt="Fachada REX-LAND Adventure" />
+  </div>
+  <div class="hero-grain"></div>
+  <div class="hero-inner">
+    <div class="hero-meta">
+      <div class="hero-left">
+        <span class="eyebrow">Restaurante temático · Experiencia inmersiva</span>
+        <h1 class="display">
+          REX·LAND<br/>
+          <span class="accent">Adventure</span>
+          <span class="small">Donde la mesa se vuelve excavación</span>
+        </h1>
+        <p class="hero-tag">Un restaurante temático sobre 954 m² con 17 dinosaurios animatrónicos, zonas infantiles y arquitectura contemporánea con materiales naturales. Comida, juego y descubrimiento bajo un mismo techo.</p>
+        <div class="hero-cta">
+          <a href="#reservas" class="btn">Reservar mesa <span class="arr"></span></a>
+          <a href="#reservas" class="btn ghost" onclick="setTab('exp')">Comprar boletos</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="info-card">
+          <div class="label">Próxima apertura</div>
+          <div class="val">Q3<small>2026</small></div>
+        </div>
+        <div class="info-card">
+          <div class="label">Ubicación</div>
+          <div class="val" style="font-size:22px">Almanara<small>Torreón, Coah.</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stripe"></div>
+
+<!-- ============== STATS ============== -->
+<section class="stats">
+  <div class="stat">
+    <div class="num">17<span class="u">PCS</span></div>
+    <div class="lbl">Dinosaurios animatrónicos con movimiento y sonido</div>
+  </div>
+  <div class="stat">
+    <div class="num">954<span class="u">M²</span></div>
+    <div class="lbl">Superficie construida sobre un pad de la plaza</div>
+  </div>
+  <div class="stat">
+    <div class="num">2<span class="u">EN 1</span></div>
+    <div class="lbl">Restaurante familiar + recorrido jurásico inmersivo</div>
+  </div>
+  <div class="stat">
+    <div class="num">3<span class="u">ZN</span></div>
+    <div class="lbl">Comedor temático · Sala T-Rex · Zona infantil</div>
+  </div>
+</section>
+
+<!-- ============== EXPERIENCE ============== -->
+<section class="experience" id="experiencia">
+  <div class="wrap">
+    <div class="exp-grid">
+      <div class="exp-img">
+        <span class="tag">SALA 01</span>
+        <img src="assets/tyrannosaurus-hall.png" alt="Sala Tyrannosaurus — entrada principal" />
+        <div class="specimen">
+          <div class="name">Tyrannosaurus Rex</div>
+          <div class="row"><span>ESPECIMEN</span><b>RXL—001</b></div>
+          <div class="row"><span>ALTURA</span><b>3.8 m</b></div>
+          <div class="row"><span>SONIDO</span><b>Activo</b></div>
+          <div class="row"><span>MOV.</span><b>Cabeza · Mandíbula</b></div>
+        </div>
+      </div>
+      <div class="exp-text">
+        <span class="eyebrow">El concepto</span>
+        <h2>Comer, recorrer, <span class="y">descubrir</span>.</h2>
+        <p>REX-LAND Adventure no es únicamente un restaurante temático: es un espacio integral diseñado para ofrecer experiencia, interacción, entretenimiento y conexión social. Pensado para ser vivido, recorrido y compartido por niños, jóvenes y adultos.</p>
+        <p>El diseño —desarrollado por Venegas Arquitectura— combina materiales de apariencia natural, elementos orgánicos y líneas modernas tanto en fachada como en interiores. Movimiento, sonido y un nivel de realismo notable convierten a los dinosaurios en protagonistas del espacio.</p>
+        <div class="features">
+          <div class="feature">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12c4-6 14-6 18 0M3 12c4 6 14 6 18 0"/><circle cx="12" cy="12" r="2.4"/></svg></div>
+            <div><h4>Recorrido sensorial</h4><p>Iluminación, paisaje sonoro y vegetación calibrados por zona.</p></div>
+          </div>
+          <div class="feature">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 18V8a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10"/><path d="M4 18h16M9 14h6"/></svg></div>
+            <div><h4>Cocina abierta</h4><p>Brasas a la vista, menú familiar con perfil texmex moderno.</p></div>
+          </div>
+          <div class="feature">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M6 6l12 12M18 6 6 18"/></svg></div>
+            <div><h4>Zona infantil</h4><p>Área supervisada con excavación, fósiles y juegos interactivos.</p></div>
+          </div>
+          <div class="feature">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3 9h18M7 14h4"/></svg></div>
+            <div><h4>Eventos privados</h4><p>Cumpleaños, escuelas y eventos corporativos con paquete cerrado.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== ZONES ============== -->
+<section class="zones" id="zonas">
+  <div class="wrap">
+    <div class="zones-head">
+      <div>
+        <span class="eyebrow">Recorrido por el espacio</span>
+        <h2>Seis zonas. Una <span style="color:var(--yellow)">expedición</span> completa.</h2>
+      </div>
+      <p>Cada área tiene su propia atmósfera, iluminación y especímenes. Recorrelas en orden o regresa varias veces — siempre hay un detalle nuevo que descubrir.</p>
+    </div>
+    <div class="zone-grid">
+      <article class="zone">
+        <span class="num">01</span>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 18 L4 9 L9 4 L15 4 L20 9 L20 18 Z"/><path d="M9 18v-6h6v6"/></svg></div>
+        <h3>Recibidor</h3>
+        <p>La entrada con doble torre de piedra y el wordmark iluminado. Punto de check-in y primer encuentro con el T-Rex de bienvenida.</p>
+        <div class="meta"><span><b>Tiempo</b>5 min</span><span><b>Aforo</b>40</span></div>
+      </article>
+      <article class="zone">
+        <span class="num">02</span>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 14c2-6 8-6 10-2s8 2 8 6"/><circle cx="7" cy="10" r="1"/><circle cx="14" cy="6" r="1"/></svg></div>
+        <h3>Sala T-Rex</h3>
+        <p>Hall principal con el animatrónico ícono detrás de un cristal escenificado en jungla y roca volcánica. Foto obligada antes de pasar a mesa.</p>
+        <div class="meta"><span><b>Animatrónicos</b>2</span><span><b>Foto</b>Sí</span></div>
+      </article>
+      <article class="zone">
+        <span class="num">03</span>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="9" width="18" height="11" rx="1"/><path d="M7 9V6a5 5 0 0 1 10 0v3"/></svg></div>
+        <h3>Comedor principal</h3>
+        <p>120 cubiertos bajo lámparas orgánicas tejidas y muros con vegetación viva. Vista directa al jardín de fósiles y a la cocina abierta.</p>
+        <div class="meta"><span><b>Cubiertos</b>120</span><span><b>Mesas</b>26</span></div>
+      </article>
+      <article class="zone">
+        <span class="num">04</span>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l3 5h5l-4 4 2 6-6-4-6 4 2-6-4-4h5z"/></svg></div>
+        <h3>Excavación infantil</h3>
+        <p>Foso con arena, fósiles ocultos y herramientas seguras. Talleres guiados los fines de semana, supervisión incluida en el boleto.</p>
+        <div class="meta"><span><b>Edad</b>3–12 años</span><span><b>Sesión</b>30 min</span></div>
+      </article>
+      <article class="zone">
+        <span class="num">05</span>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 20c4-2 6-8 9-8s5 6 9 8"/><path d="M7 12V8m10 4V8"/></svg></div>
+        <h3>Jardín de especímenes</h3>
+        <p>Pasaje exterior con 8 animatrónicos a escala 1:1 entre vegetación, niebla y sonido ambiental. Recorrido autoguiado de 12 minutos.</p>
+        <div class="meta"><span><b>Animatrónicos</b>8</span><span><b>Tiempo</b>12 min</span></div>
+      </article>
+      <article class="zone">
+        <span class="num">06</span>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 21V11l7-6 7 6v10"/><path d="M9 21v-6h6v6"/></svg></div>
+        <h3>Salón privado</h3>
+        <p>40 personas, audio independiente, proyector y barra dedicada. Cumpleaños temáticos, eventos escolares y reuniones corporativas.</p>
+        <div class="meta"><span><b>Capacidad</b>40</span><span><b>Paquete</b>Cerrado</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============== BOOKING ============== -->
+<section class="booking" id="reservas">
+  <div class="wrap">
+    <div class="booking-grid">
+      <div class="booking-side">
+        <span class="eyebrow">Reservas en línea</span>
+        <h2>Asegura tu <span class="y">expedición</span>.</h2>
+        <p>Elige entre reservar una mesa en el comedor principal o adquirir tu boleto para el recorrido inmersivo. Confirmación inmediata y cancelación gratuita hasta 24 hrs antes.</p>
+        <div class="protocol">
+          <h4>Protocolo de visita</h4>
+          <ul>
+            <li>Llega 10 minutos antes del horario reservado para tu briefing de seguridad.</li>
+            <li>Niños menores de 6 años deben ir acompañados de un adulto en todo momento.</li>
+            <li>El recorrido incluye efectos de sonido fuertes y luz tenue — no apto para fobias.</li>
+            <li>Permitido fotografía sin flash. Filmación profesional requiere autorización previa.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="booker">
+        <div class="booker-tabs">
+          <button class="tab active" data-tab="rest" onclick="setTab('rest')">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4v8a4 4 0 0 0 8 0V4M8 4v16M16 4c-2 0-3 2-3 5s1 5 3 5v6"/></svg></div>
+            <div class="lbl"><span class="big">Mesa</span><span class="sm">Restaurante · 90 min</span></div>
+          </button>
+          <button class="tab" data-tab="exp" onclick="setTab('exp')">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg></div>
+            <div class="lbl"><span class="big">Boleto</span><span class="sm">Experiencia jurásica · 45 min</span></div>
+          </button>
+        </div>
+
+        <div class="booker-body">
+          <div class="field-grid">
+            <div class="field col-2">
+              <label>Fecha de visita</label>
+              <input type="date" id="bk-date" />
+            </div>
+            <div class="field col-2">
+              <label id="bk-party-label">Personas</label>
+              <div class="stepper">
+                <button type="button" onclick="step(-1)">−</button>
+                <input type="text" id="bk-party" value="4" readonly />
+                <button type="button" onclick="step(1)">+</button>
+              </div>
+            </div>
+
+            <div class="field col-4">
+              <label>Horarios disponibles</label>
+              <div class="slots" id="bk-slots"></div>
+            </div>
+
+            <div class="field col-4" id="bk-packages-wrap" style="display:none">
+              <label>Paquete de experiencia</label>
+              <div class="package-grid" id="bk-packages"></div>
+            </div>
+
+            <div class="field col-2">
+              <label>Nombre completo</label>
+              <input type="text" placeholder="Ej. Mariana Vela" />
+            </div>
+            <div class="field col-2">
+              <label>Teléfono / WhatsApp</label>
+              <input type="tel" placeholder="+52 871 ··· ····" />
+            </div>
+            <div class="field col-4">
+              <label>Email para confirmación</label>
+              <input type="email" placeholder="tu@correo.com" />
+            </div>
+          </div>
+
+          <div class="summary">
+            <div class="summary-left">
+              <span class="lbl" id="bk-sum-lbl">Total estimado · Mesa</span>
+              <span class="price"><span id="bk-total">$ 0</span><small>MXN</small></span>
+              <span class="detail" id="bk-detail">Selecciona fecha y horario para continuar.</span>
+            </div>
+            <button class="btn" onclick="confirmBooking()">Confirmar reserva <span class="arr"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== MENU ============== -->
+<section class="menu" id="menu">
+  <div class="wrap">
+    <div class="menu-head">
+      <div>
+        <span class="eyebrow">Carta destacada</span>
+        <h2>Cocina de <span class="y">expedición</span> — para todos.</h2>
+      </div>
+      <p style="max-width:380px;color:var(--cream-2);line-height:1.6;margin:0">Platillos pensados para compartir, opciones infantiles divertidas y especiales del chef con un toque temático. Carta completa disponible al sentarse.</p>
+    </div>
+    <div class="menu-grid">
+      <article class="dish">
+        <span class="badge">Para compartir</span>
+        <h3>Costillar Volcán</h3>
+        <p class="es">Costillas BBQ ahumadas a la leña con salsa picante de habanero, papas en gajo y elote a la mantequilla.</p>
+        <div class="foot"><span>02–04 PAX</span><span class="price">$ 590</span></div>
+      </article>
+      <article class="dish">
+        <span class="badge">Kids</span>
+        <h3>Huevo de Dino</h3>
+        <p class="es">Hamburguesa mini en pan brioche negro, papas crujientes y nuggets de pollo. Llega con un fósil de chocolate.</p>
+        <div class="foot"><span>+3 AÑOS</span><span class="price">$ 175</span></div>
+      </article>
+      <article class="dish">
+        <span class="badge">Especial chef</span>
+        <h3>Brontosaurio</h3>
+        <p class="es">Tomahawk 800g sellado en parrilla con sal de gusano, chimichurri verde, frijol charro y tortillas hechas a mano.</p>
+        <div class="foot"><span>02 PAX</span><span class="price">$ 1,290</span></div>
+      </article>
+      <article class="dish">
+        <span class="badge">Vegano</span>
+        <h3>Pantano Verde</h3>
+        <p class="es">Bowl de quinoa, aguacate asado, kale, hongos portobello al carbón y vinagreta de cilantro y limón persa.</p>
+        <div class="foot"><span>01 PAX</span><span class="price">$ 245</span></div>
+      </article>
+      <article class="dish">
+        <span class="badge">Bebidas</span>
+        <h3>Ámbar Jurásico</h3>
+        <p class="es">Mocktail de mango, maracuyá, naranja y limón con esfera de hielo y ramita de romero quemada al servirlo.</p>
+        <div class="foot"><span>SIN ALCOHOL</span><span class="price">$ 110</span></div>
+      </article>
+      <article class="dish">
+        <span class="badge">Bebidas</span>
+        <h3>Cráter Mezcal</h3>
+        <p class="es">Mezcal espadín, jugo de tuna, jarabe de chile pasilla y sal de gusano en el aro. Servido con humo de mezquite.</p>
+        <div class="foot"><span>+18</span><span class="price">$ 195</span></div>
+      </article>
+      <article class="dish">
+        <span class="badge">Postre</span>
+        <h3>Fósil de Chocolate</h3>
+        <p class="es">Brownie tibio con corazón de cajeta, helado de vainilla y galleta-fósil con huella de dinosaurio para romper a la mesa.</p>
+        <div class="foot"><span>01 PAX</span><span class="price">$ 145</span></div>
+      </article>
+      <article class="dish">
+        <span class="badge">Postre</span>
+        <h3>Huevo de Hielo</h3>
+        <p class="es">Esfera de chocolate blanco que se derrite con chocolate caliente vertido a la mesa, revelando mousse de frambuesa.</p>
+        <div class="foot"><span>02 PAX</span><span class="price">$ 220</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============== LOCATION ============== -->
+<section class="location" id="ubicacion">
+  <div class="wrap">
+    <div class="loc-grid">
+      <div class="loc-text">
+        <span class="eyebrow">Ubicación · Almanara</span>
+        <h2>En uno de los pads más visibles de la <span class="y">plaza</span>.</h2>
+        <p>REX-LAND Adventure se desarrolla sobre 954 m² en un pad independiente de Almanara, con acceso directo desde el estacionamiento y desde el paseo central. Diseño exterior con doble torre de piedra natural y carpintería en madera vista que dialoga con la arquitectura de la plaza.</p>
+        <div class="loc-data">
+          <div class="data-card"><div class="lbl">Dirección</div><div class="val">Almanara, Blvd. Independencia Pte.<br/>Torreón, Coahuila, México</div></div>
+          <div class="data-card"><div class="lbl">Horario</div><div class="val">Lunes a domingo<br/>13:00 – 23:00 hrs</div></div>
+          <div class="data-card"><div class="lbl">Capacidad</div><div class="val">160 personas + salón privado de 40</div></div>
+          <div class="data-card"><div class="lbl">Estacionamiento</div><div class="val">Compartido con plaza · valet opcional</div></div>
+        </div>
+      </div>
+      <div class="map">
+        <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M40 0H0V40" fill="none" stroke="#1c1610" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="400" height="400" fill="#0a0805"/>
+          <rect width="400" height="400" fill="url(#grid)"/>
+          <!-- roads -->
+          <path d="M0 220 L400 200" stroke="#2a221b" stroke-width="20" fill="none"/>
+          <path d="M180 0 L210 400" stroke="#2a221b" stroke-width="14" fill="none"/>
+          <path d="M0 320 L400 340" stroke="#2a221b" stroke-width="8" fill="none"/>
+          <!-- plaza outline -->
+          <rect x="180" y="140" width="120" height="100" fill="#15110c" stroke="#3a312a" stroke-width="1.5"/>
+          <rect x="190" y="150" width="40" height="30" fill="#1a140e" stroke="#3a312a"/>
+          <rect x="240" y="150" width="50" height="40" fill="#1a140e" stroke="#3a312a"/>
+          <rect x="190" y="195" width="100" height="35" fill="#1a140e" stroke="#3a312a"/>
+          <!-- our pad highlighted -->
+          <rect x="206" y="184" width="24" height="20" fill="#f2c012" stroke="#f2c012" opacity=".85"/>
+          <text x="20" y="380" font-family="JetBrains Mono,monospace" font-size="9" fill="#9b8f7e" letter-spacing="2">25.553° N · 103.412° W · ALMANARA · TORREÓN</text>
+          <text x="20" y="22" font-family="JetBrains Mono,monospace" font-size="9" fill="#9b8f7e" letter-spacing="2">N ↑</text>
+        </svg>
+        <div class="dot"></div>
+        <div class="pin">REX-LAND</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== CTA STRIP ============== -->
+<div class="stripe"></div>
+<section class="cta-strip">
+  <div class="row" style="max-width:1280px;margin:0 auto">
+    <h3>¿Cumpleaños, escuela o evento privado?<br/>Te armamos un paquete cerrado.</h3>
+    <a href="#" class="btn">Solicitar cotización <span class="arr"></span></a>
+  </div>
+</section>
+<div class="stripe"></div>
+
+<!-- ============== FOOTER ============== -->
+<footer>
+  <div class="wrap">
+    <div class="ft-grid">
+      <div>
+        <div class="brand" style="margin-bottom:18px">
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 14 L8 6 L14 9 L20 7 L19 13 L21 16 L17 17 L15 21 L11 18 L7 19 L5 16 Z"/><circle cx="9" cy="12" r=".9" fill="currentColor"/></svg>
+          </div>
+          <div class="brand-text"><div class="name">REX·LAND</div><div class="sub">Adventure · MX</div></div>
+        </div>
+        <p class="ft-about">Restaurante temático y experiencia inmersiva. 954 m² · 17 animatrónicos · desarrollado por Proyectos Torreón.</p>
+      </div>
+      <div>
+        <h5>Visítanos</h5>
+        <ul>
+          <li><a href="#experiencia">Experiencia</a></li>
+          <li><a href="#zonas">Zonas</a></li>
+          <li><a href="#menu">Menú</a></li>
+          <li><a href="#ubicacion">Ubicación</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Reservas</h5>
+        <ul>
+          <li><a href="#reservas">Reservar mesa</a></li>
+          <li><a href="#reservas">Comprar boleto</a></li>
+          <li><a href="#">Eventos privados</a></li>
+          <li><a href="#">Paquetes escolares</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contacto</h5>
+        <ul>
+          <li>+52 871 000 0000</li>
+          <li><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="046c6b68654476617c68656a602a697c">[email&#160;protected]</a></li>
+          <li>Almanara, Torreón</li>
+          <li>@rexland.adventure</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <span>© 2026 REX-LAND Adventure · Todos los derechos reservados</span>
+      <span>Desarrollado por Proyectos Torreón</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============== CONFIRMATION MODAL ============== -->
+<div class="modal" id="modal" onclick="if(event.target.id==='modal') closeModal()">
+  <div class="modal-card">
+    <button class="close" onclick="closeModal()">×</button>
+    <span class="eyebrow">Reserva confirmada</span>
+    <h3>¡Tu <span class="y">expedición</span> está apartada!</h3>
+    <p>Te enviamos una confirmación al correo proporcionado. Llega 10 minutos antes para tu briefing de seguridad — el equipo de campo te recibirá en el recibidor.</p>
+    <div class="rec" id="modal-rec"></div>
+    <div class="code">CONFIRMACIÓN · <span id="modal-code">RXL—000000</span></div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // ---- Booking state ----
+  const slotsRest = ["13:00","13:30","14:00","14:30","15:00","15:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30"];
+  const slotsExp  = ["13:15","14:15","15:15","16:15","17:15","18:15","19:15","20:15","21:15"];
+  const disabledByDay = {0:[],1:["13:00","13:30"],2:[],3:[],4:[],5:["20:00","20:30"],6:["13:00","13:30","14:00"]};
+
+  const packages = [
+    {id:"std", name:"Estándar", price:"$ 280 MXN", desc:"Acceso al recorrido + souvenir + 1 bebida.", perPerson:280},
+    {id:"fam", name:"Familiar", price:"$ 240 MXN", desc:"Tarifa por persona desde 4 pax. Incluye foto grupal.", perPerson:240},
+    {id:"vip", name:"VIP Excavador", price:"$ 480 MXN", desc:"Recorrido guiado + taller fósiles + kit completo.", perPerson:480}
+  ];
+  const restPerPerson = 380; // estimated avg cover
+  let state = {
+    tab:"rest",
+    party:4,
+    slot:null,
+    pkg:"std",
+    date:null,
+  };
+
+  // Default date = today + 3
+  (function initDate(){
+    const d = new Date(); d.setDate(d.getDate()+3);
+    const iso = d.toISOString().slice(0,10);
+    state.date = iso;
+    const inp = document.getElementById("bk-date");
+    inp.value = iso;
+    inp.min  = new Date().toISOString().slice(0,10);
+    inp.addEventListener("change",()=>{ state.date = inp.value; renderSlots(); updateSummary(); });
+  })();
+
+  function setTab(t){
+    state.tab = t;
+    document.querySelectorAll(".tab").forEach(el=>el.classList.toggle("active", el.dataset.tab===t));
+    document.getElementById("bk-party-label").textContent = (t==="rest") ? "Personas" : "Visitantes";
+    document.getElementById("bk-packages-wrap").style.display = (t==="exp") ? "flex" : "none";
+    document.getElementById("bk-sum-lbl").textContent = (t==="rest") ? "Total estimado · Mesa" : "Total · Boletos";
+    state.slot = null;
+    renderSlots();
+    renderPackages();
+    updateSummary();
+  }
+
+  function step(d){
+    state.party = Math.max(1, Math.min(20, state.party+d));
+    document.getElementById("bk-party").value = state.party;
+    updateSummary();
+  }
+
+  function renderSlots(){
+    const list = (state.tab==="rest")? slotsRest : slotsExp;
+    const dayIdx = new Date(state.date).getDay();
+    const disabled = disabledByDay[dayIdx] || [];
+    const root = document.getElementById("bk-slots");
+    root.innerHTML = "";
+    list.forEach(s=>{
+      const el = document.createElement("button");
+      el.type="button";
+      el.className = "slot" + (disabled.includes(s)?" disabled":"") + (state.slot===s?" active":"");
+      el.textContent = s;
+      if(!disabled.includes(s)) el.addEventListener("click",()=>{
+        state.slot = s;
+        renderSlots();
+        updateSummary();
+      });
+      root.appendChild(el);
+    });
+  }
+
+  function renderPackages(){
+    const root = document.getElementById("bk-packages");
+    root.innerHTML = "";
+    packages.forEach(p=>{
+      const el = document.createElement("button");
+      el.type="button";
+      el.className = "pkg" + (state.pkg===p.id?" active":"");
+      el.innerHTML = `<div class="name">${p.name}</div><div class="price">${p.price}</div><div class="desc">${p.desc}</div>`;
+      el.addEventListener("click",()=>{ state.pkg=p.id; renderPackages(); updateSummary(); });
+      root.appendChild(el);
+    });
+  }
+
+  function updateSummary(){
+    let total = 0, detail="";
+    if(state.tab==="rest"){
+      total = restPerPerson * state.party;
+      detail = `Estimado a $ ${restPerPerson} por persona · ${state.party} ${state.party===1?"comensal":"comensales"} · ${state.slot||"sin horario"}`;
+    } else {
+      const pk = packages.find(x=>x.id===state.pkg);
+      total = pk.perPerson * state.party;
+      detail = `Paquete ${pk.name} · ${state.party} ${state.party===1?"boleto":"boletos"} · ${state.slot||"sin horario"}`;
+    }
+    document.getElementById("bk-total").textContent = "$ " + total.toLocaleString("es-MX");
+    document.getElementById("bk-detail").textContent = detail;
+  }
+
+  function confirmBooking(){
+    if(!state.slot){ alert("Selecciona un horario para continuar."); return; }
+    const code = "RXL—" + Math.floor(100000 + Math.random()*899999);
+    const rec = document.getElementById("modal-rec");
+    const pk = packages.find(x=>x.id===state.pkg);
+    const fechaFmt = new Date(state.date+"T00:00").toLocaleDateString("es-MX",{weekday:"long",day:"2-digit",month:"short",year:"numeric"});
+    rec.innerHTML = `
+      <div><div class="lbl">Tipo</div><div class="val">${state.tab==="rest"?"Reserva de mesa":"Boletos · "+pk.name}</div></div>
+      <div><div class="lbl">Fecha</div><div class="val">${fechaFmt}</div></div>
+      <div><div class="lbl">Horario</div><div class="val">${state.slot} hrs</div></div>
+      <div><div class="lbl">Personas</div><div class="val">${state.party}</div></div>
+    `;
+    document.getElementById("modal-code").textContent = code;
+    document.getElementById("modal").classList.add("show");
+  }
+  function closeModal(){ document.getElementById("modal").classList.remove("show"); }
+
+  // init
+  renderSlots();
+  renderPackages();
+  updateSummary();
+
+  // Smooth scroll for nav links + active state
+  document.querySelectorAll(".nav-links a").forEach(a=>{
+    a.addEventListener("click",e=>{
+      const id = a.getAttribute("href");
+      if(id.startsWith("#")){
+        e.preventDefault();
+        document.querySelector(id)?.scrollIntoView({behavior:"smooth",block:"start"});
+        document.querySelectorAll(".nav-links a").forEach(x=>x.classList.remove("active"));
+        a.classList.add("active");
+      }
+    });
+  });
+</script>
+</body>
+</html>
